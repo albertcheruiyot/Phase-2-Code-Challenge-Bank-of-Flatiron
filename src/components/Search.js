@@ -1,28 +1,30 @@
 import React, { useEffect, useState } from "react";
 
 function Search({ searchFunction }) {
-  // State to hold the search input value
-  const [search, setSearch] = useState("");
 
-  // useEffect hook to trigger the searchFunction when search input changes
-  useEffect(function () {
-    searchFunction(search);
-  }, [search]);
-
-  // Function to handle search input change
-  function handleSearch(e) {
+  function handleSearchTransaction(e) {
     e.preventDefault();
     setSearch(e.target.value);
   }
 
-  // Render the component
+  const [search, setSearch] = useState("");
+
+  /*useEffect(function() {
+    searchFunction(search);
+  }, [search]);*/
+
+  useEffect(function() {
+    searchFunction(search);
+  }, [search, searchFunction]);
+
+
   return (
     <form className="d-flex">
       <input
-        className="formcontrol"
+        className="form-control"
         type="text"
         placeholder="Search transactions"
-        onChange={handleSearch}
+        onChange={handleSearchTransaction}
         id="search"
       />
       <button className="btn btn-outline-info ms-1" id="searchBtn">
