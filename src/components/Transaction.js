@@ -1,5 +1,8 @@
 import React from "react";
-function Transaction({date, description, category, amount}) {
+
+function Transaction({ transaction }) {
+  const { date, description, category, amount } = transaction;
+
   return (
     <tr>
       <td>{date}</td>
@@ -9,4 +12,5 @@ function Transaction({date, description, category, amount}) {
     </tr>
   );
 }
+
 export default Transaction;

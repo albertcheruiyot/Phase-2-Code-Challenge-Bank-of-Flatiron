@@ -1,49 +1,43 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-function AddTransactionForm({fetchFunction}) {
-  const [submittedTransaction, setSubmittedTransaction] = useState(null);
+function AddTransactionForm({ onAddTransaction }) {
+  const [formData, setFormData] = useState({
+    date: "",
+    description: "",
+    category: "",
+    amount: ""
+  });
 
-  useEffect(() => {
-   fetchFunction(submittedTransaction)
+  const handleChange = event => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
-  })
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    const date = e.target.date.value;
-    const description = e.target.description.value;
-    const category = e.target.category.value;
-    const amount = e.target.amount.value;
-
-    const formData = {
-      date: date,
-      description: description,
-      category: category,
-      amount: amount
-    }
-
-    setSubmittedTransaction(formData);
-    e.target.reset();
-
-  }
-
+  const handleSubmit = event => {
+    event.preventDefault();
+    
+    onAddTransaction(formData);
+   
+    setFormData({
+      date: "",
+      description: "",
+      category: "",
+      amount: ""
+    });
+  };
   return (
     <div className="ui segment">
-      <form className="formbox" onSubmit={handleSubmit}>
-        <div className="form">
-          <input type="date" name="date" />
-          <input type="text" name="description" placeholder="Description" />
-          <input type="text" name="category" placeholder="Category" />
-          <input type="number" name="amount" placeholder="Amount" />
-          <br></br>
+      <form className="ui form" onSubmit={handleSubmit}>
+        <div className="inline fields">
+          <input type="date" name="date"  onChange={handleChange} value={formData.date}/>
+          <input type="text" name="description" placeholder="Description"  value={formData.description} onChange={handleChange}/>
+          <input type="text" name="category" placeholder="Category"  value={formData.category} onChange={handleChange}/>
+          <input type="number" name="amount" placeholder="Amount" step="0.01"  value={formData.amount} onChange={handleChange}/>
         </div>
-        <br></br>
-        <br></br>
-        <button className="btn btn-outline-info ms-1" type="submit">
+        <button className="ui button" type="submit">
           Add Transaction
         </button>
       </form>
-
     </div>
   );
 }

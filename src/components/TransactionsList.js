@@ -1,14 +1,9 @@
 import React from "react";
 import Transaction from "./Transaction";
 
-function TransactionsList({ data }) {
-  function renderTransactions() {
-    return data.map(function(dataItem) {
-      return <Transaction key={dataItem.id} date={dataItem.date} description={dataItem.description} category={dataItem.category} amount={dataItem.amount} />;
-    });
-  }
+function TransactionsList({ transactions }) {
   return (
-    <table className="table table-light">
+    <table className="ui celled striped padded table">
       <tbody>
         <tr>
           <th>
@@ -24,9 +19,13 @@ function TransactionsList({ data }) {
             <h3 className="ui center aligned header">Amount</h3>
           </th>
         </tr>
-        {renderTransactions()}
+        {/* render a list of <Transaction> components here */}
+        {transactions.map(transaction => (
+          <Transaction key={transaction.id} transaction={transaction} />
+        ))}
       </tbody>
     </table>
   );
 }
+
 export default TransactionsList;

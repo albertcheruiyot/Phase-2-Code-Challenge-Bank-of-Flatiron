@@ -1,61 +1,55 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import TransactionsList from "./TransactionsList";
 import Search from "./Search";
 import AddTransactionForm from "./AddTransactionForm";
 
 function AccountContainer() {
-  const [transactionsData, setTransactionsData] = useState([]);
-  const [transactionsUpdate, setTransactionUpdate] = useState([]);
+  const [transactions, setTransactions] = useState([]);
+  const [filteredTransactions, setFilteredTransactions] = useState([]);
 
-  useEffect(function fetchTransactions() {
+  useEffect(() => {
+    // Fetch data from the backend when the component mounts
     fetch("http://localhost:8001/transactions")
-      .then(function(res) {
-        return res.json();
+      .then(response => response.json())
+      .then(data => {
+        setTransactions(data);
+        setFilteredTransactions(data); // Initialize filtered transactions with all transactions
       })
-      .then(function(data) {
-        setTransactionsData(data);
-      });
-  }, [transactionsUpdate]);
+      .catch(error => console.error("Error fetching data:", error));
+  }, []);
 
-  async function fetchAddTransaction(submitted) {
+  const handleAddTransaction = newTransaction => {
+    // Make a POST request to the backend API to persist the new transaction
     fetch("http://localhost:8001/transactions", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json"
+        "Content-Type": "application/json"
       },
-      body: JSON.stringify(submitted)
+      body: JSON.stringify(newTransaction)
     })
-      .then(function(res) {
-        return res.json();
+      .then(response => response.json())
+      .then(data => {
+        // Update the local state with the new transaction data returned from the API
+        setTransactions([...transactions, data]);
+        setFilteredTransactions([...filteredTransactions, data]);
+        console.log("New transaction added:", data);
       })
-      .then(function(data) {
-        let newData = [];
-        newData.push(data);
-        setTransactionUpdate(newData);
-      });
-  }
+      .catch(error => console.error("Error adding new transaction:", error));
+  };
 
-  async function searchTransaction(searchInput) {
-    fetch("http://localhost:8001/transactions")
-      .then(function(res) {
-        return res.json();
-      })
-      .then(function(data) {
-        const filtered = data.filter(function(item) {
-          return item.description.includes(searchInput);
-        });
-        setTransactionsData(filtered);
-      });
-  }
-
-  
+  const handleSearch = searchTerm => {
+    // Filter transactions based on the search term
+    const filtered = transactions.filter(transaction =>
+      transaction.description.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredTransactions(filtered);
+  };
 
   return (
     <div>
-      <Search searchFunction={searchTransaction} />
-      <AddTransactionForm fetchFunction={fetchAddTransaction} />
-      <TransactionsList data={transactionsData} />
+      <Search onSearch={handleSearch} />
+      <AddTransactionForm onAddTransaction={handleAddTransaction} />
+      <TransactionsList transactions={filteredTransactions} />
     </div>
   );
 }

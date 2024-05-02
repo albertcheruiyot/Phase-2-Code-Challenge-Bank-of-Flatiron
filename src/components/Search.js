@@ -1,36 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-function Search({ searchFunction }) {
+function Search({ onSearch }) {
+  const [searchTerm, setSearchTerm] = useState("");
 
-  function handleSearchTransaction(e) {
-    e.preventDefault();
-    setSearch(e.target.value);
-  }
-
-  const [search, setSearch] = useState("");
-
-  /*useEffect(function() {
-    searchFunction(search);
-  }, [search]);*/
-
-  useEffect(function() {
-    searchFunction(search);
-  }, [search, searchFunction]);
-
+  const handleChange = event => {
+    const value = event.target.value;
+    setSearchTerm(value);
+    
+    onSearch(value);
+  };
 
   return (
-    <form className="d-flex">
+    <div className="ui large fluid icon input">
       <input
-        className="form-control"
         type="text"
-        placeholder="Search transactions"
-        onChange={handleSearchTransaction}
-        id="search"
+        placeholder="Search your Recent Transactions"
+        value={searchTerm}
+        onChange={handleChange}
       />
-      <button className="btn btn-outline-info ms-1" id="searchBtn">
-        SEARCH
-      </button>
-    </form>
+      <i className="circular search link icon"></i>
+    </div>
   );
 }
 
