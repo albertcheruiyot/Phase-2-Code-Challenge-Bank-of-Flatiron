@@ -1,7 +1,12 @@
 import React from "react";
 
-function Transaction({ transaction }) {
-  const { date, description, category, amount } = transaction;
+function Transaction({ transaction, onDelete}) {
+  const { id, date, description, category, amount } = transaction;
+
+  const handleDelete = () => {
+    // Call the onDelete function provided by the parent component with the transaction ID
+    onDelete(id);
+  };
 
   return (
     <tr>
@@ -9,6 +14,12 @@ function Transaction({ transaction }) {
       <td>{description}</td>
       <td>{category}</td>
       <td>{amount}</td>
+      <td>
+        <button className="ui button red" onClick={handleDelete}>
+          Delete
+        </button>
+      </td>
+
     </tr>
   );
 }

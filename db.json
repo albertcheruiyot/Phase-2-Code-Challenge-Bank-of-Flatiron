@@ -83,13 +83,6 @@
       "description": "Venmo, Pay Roommate for Rent",
       "category": "Housing",
       "amount": -975
-    },
-    {
-      "date": "2019-12-12",
-      "description": "Pay from Applovin",
-      "category": "Income",
-      "amount": "200",
-      "id": 13
     }
   ]
 }
